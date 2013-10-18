@@ -1,0 +1,41 @@
+﻿<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+	</head>
+	<body>
+		<div ng-app>
+		<div ng-controller="EntryCtrl">
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Status</th>
+						<th>Pollutants</th>
+						<th>Zip Code</th>
+						<th>Score</th>
+					</tr>
+				</thead>
+	     		<tbody ng-repeat="entry in entrys">
+	    			<tr>
+						<td>{{entry.name}}</td>
+						<td>{{entry.status}}</td>
+						<td>{{entry.pollutants}}</td>
+						<td>{{entry.zipcode}}</td>
+						<td>{{entry.score}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+	    function EntryCtrl($scope, $http) {
+	        var url = "http://opendata.socrata.com/resource/2brv-dhpz.json?";
+
+	        delete $http.defaults.headers.common['X-Requested-With']
+	        $http.get(url).then(function (response) {
+	            $scope.entrys = response.data;
+	        });
+	    }
+	</script>
+</html>

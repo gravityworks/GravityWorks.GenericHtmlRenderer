@@ -1,0 +1,73 @@
+﻿<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
+	</head>
+	<body>
+		<div id="binding1">
+			<table class="table" data-bind="visible: Entrys().length>0">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Status</th>
+						<th>Pollutants</th>
+						<th>Zip Code</th>
+						<th>Score</th>
+					</tr>
+				</thead>
+				<!--Iterate through an observableArray using foreach-->
+	     		<tbody data-bind="foreach:  Entrys">
+	    			<tr>
+						<td><span data-bind="text: name"></span></td>
+						<td><span data-bind="text: status"></span></td>
+	   					<td><span data-bind="text: pollutants"></span></td>
+	 					<td><span data-bind="text: zipcode"></span></td>
+						<td><span data-bind="text: score"></span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+	<script type="text/javascript">
+	    var EntryViewModel = function () {
+	        var self = this;
+
+	        self.status = ko.observable("0");
+	        self.pollutants = ko.observable("");
+	        self.zipcode = ko.observable("");
+	        self.score = ko.observable("");
+	        self.name = ko.observable("");
+
+	        var EntryData = {
+	            status: self.status,
+	            pollutants: self.pollutants,
+	            zipcode: self.zipcode,
+	            score: self.score,
+	            name: self.name
+	        };
+
+	        self.Entrys = ko.observableArray([]);
+
+	        GetEntrys(0);
+
+	        self.save = function () {
+	        };
+
+	        function GetEntrys() {
+	            $.ajax({
+	                type: "GET",
+	                url: "http://opendata.socrata.com/resource/2brv-dhpz.json?",
+	                dataType: "json",
+	                success: function (data) {
+	                    self.Entrys(data);
+	                },
+	                error: function (error) {
+	                    alert(error.status + "-" + error.statusText);
+	                }
+	            });
+	        }
+	    };
+
+	    ko.applyBindings(new EntryViewModel(), document.getElementById('binding1'));
+	</script>
+</html>
